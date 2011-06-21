@@ -1,29 +1,26 @@
+
 module NotificationsHelper
-  def object_link(note)
-    target_type = note.popup_translation_key
-    if note.instance_of?(Notifications::Mentioned)
-      post = Mention.find(note.target_id).post
+  def object_link(translation_key, post)
+    if translation_key == "notifications.mentioned"
       if post
-        "#{translation(target_type)} #{link_to t('notifications.post'), object_path(post)}".html_safe
+        "#{translation(translation_key)} #{link_to t('notifications.post'), object_path(post)}".html_safe
       else
-        "#{translation(target_type)} #{t('notifications.deleted')} #{t('notifications.post')}"
+        "#{translation(translation_key)} #{t('notifications.deleted')} #{t('notifications.post')}"
       end
-    elsif note.instance_of?(Notifications::CommentOnPost)
-      post = Post.where(:id => note.target_id).first
+    elsif translation_key == "notifications.comment_on_post"
       if post
-        "#{translation(target_type)} #{link_to t('notifications.post'), object_path(post), 'data-ref' => post.id, :class => 'hard_object_link'}".html_safe
+        "#{translation(translation_key)} #{link_to t('notifications.post'), object_path(post), 'data-ref' => post.id, :class => 'hard_object_link'}".html_safe
       else
-        "#{translation(target_type)} #{t('notifications.deleted')} #{t('notifications.post')}"
+        "#{translation(translation_key)} #{t('notifications.deleted')} #{t('notifications.post')}"
       end
-    elsif note.instance_of?(Notifications::AlsoCommented)
-      post = Post.where(:id => note.target_id).first
+    elsif translation_key == "notifications.also_commented"
       if post
-        "#{translation(target_type, post.author.name)} #{link_to t('notifications.post'), object_path(post), 'data-ref' => post.id, :class => 'hard_object_link'}".html_safe
+        "#{translation(translation_key, post.author.name)} #{link_to t('notifications.post'), object_path(post), 'data-ref' => post.id, :class => 'hard_object_link'}".html_safe
       else
         t('notifications.also_commented_deleted')
       end
     else #Notifications:StartedSharing, Notifications::Liked, etc.
-      translation(target_type)
+      translation(translation_key)
     end
   end
 

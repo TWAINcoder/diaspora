@@ -27,7 +27,7 @@
 
               %span.from
                 = notification_people_link(note[:actors])
-                = object_link(note)
+                = object_link(note[:translation_key], note[:post])
 
               %br
               %time= timeago(note.created_at)
